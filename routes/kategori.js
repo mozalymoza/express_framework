@@ -15,4 +15,30 @@ router.get('/', function(req , res , next){
     });
 });
 
+router.get('/create', function(req, res, next){
+    res.render('kategori/create',{
+        nama_kategori: ''
+    })
+})
+
+router.post('/store', function(req, res, next){
+    try {
+        let {nama_kategori} = req.body;
+        let Data = {
+            nama_kategori
+        }
+        connection.query('insert into kategori set ?', Data, function(err, result){
+            if(err){
+                req.flash('error', 'Gagal menyimpan Data!');
+            }else{
+                req.flash('succces', 'berhasil menyimpan Data!');
+            }
+            res.redirect('/kategori');
+        })
+    } catch{
+        req.flash('error', 'terjadi keselahan pada sistem fungsi!'); 
+        res.redirect('/kategori');
+    }
+})
+
 module.exports = router;
